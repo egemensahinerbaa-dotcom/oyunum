@@ -5,240 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oto Tamir Simülatörü</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1e1e24;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .game-container {
-            background-color: #2a2a35;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        h1 { color: #ff9f43; margin-bottom: 5px; font-size: 24px; }
-        h2 { color: #54a0ff; margin-top: 0; font-size: 16px; font-weight: normal; }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            background-color: #353545;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .stat-item { display: flex; flex-direction: column; }
-        .stat-val { color: #10ac84; font-size: 18px; margin-top: 5px; }
-        .log-box {
-            background-color: #15151d;
-            border-left: 5px solid #ff9f43;
-            padding: 15px;
-            border-radius: 5px;
-            min-height: 100px;
-            margin-bottom: 20px;
-            text-align: left;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        button {
-            background-color: #5f27cd;
-            color: white;
-            border: none;
-            padding: 15px 10px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            -webkit-tap-highlight-color: transparent; /* Mobil tıklama gölgesini kaldırır */
-        }
-        button:active {
-            transform: scale(0.98);
-            background-color: #341f97;
-        }
-        button:disabled {
-            background-color: #576574;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .action-btns {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
+        body { font-family: sans-serif; background-color: #1e1e24; color: #fff; text-align: center; padding: 20px; }
+        .game-container { background-color: #2a2a35; padding: 20px; border-radius: 10px; max-width: 450px; margin: 0 auto; }
+        h1 { color: #ff9f43; }
+        .stats { background-color: #353545; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-weight: bold; }
+        .log-box { background-color: #15151d; padding: 15px; border-radius: 5px; min-height: 80px; margin-bottom: 15px; text-align: left; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        button { background-color: #5f27cd; color: white; border: none; padding: 15px; font-size: 15px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #48dbfb; color: black; }
+        button:active { background-color: #341f97; }
         .btn-yes { background-color: #10ac84; }
-        .btn-yes:active { background-color: #0b8463; }
         .btn-no { background-color: #ee5253; }
-        .btn-no:active { background-color: #c84141; }
     </style>
 </head>
 <body>
-
 <div class="game-container">
-    <h1>🚗 OTO TAMİR SİMÜLASYONU 🛠️</h1>
-    <h2>Dükkanını Yönet, İtibarını Yükselt!</h2>
-    
+    <h1>🚗 OTO TAMİR SİMÜLASYONU 🛠</h1>
     <div class="stats">
-        <div class="stat-item">📆 Gün<span id="stat-gun" class="stat-val" style="color:#ff9f43">1</span></div>
-        <div class="stat-item">💰 Kasa<span id="stat-kasa" class="stat-val">5000 TL</span></div>
-        <div class="stat-item">🔧 Parça<span id="stat-parca" class="stat-val" style="color:#0abde3">5</span></div>
-        <div class="stat-item">⭐ İtibar<span id="stat-itibar" class="stat-val" style="color:#feca57">%50</span></div>
+        📆 Gün: <span id="stat-gun">1</span> | 💰 Kasa: <span id="stat-kasa">5000</span> TL<br>
+        🔧 Parça: <span id="stat-parca">5</span> | ⭐ İtibar: %<span id="stat-itibar">50</span>
     </div>
-
-    <div id="log" class="log-box">
-        Dükkan açıldı! İş beklemek için "Müşteri Bekle" butonuna basın. Başarılar usta!
-    </div>
-
+    <div id="log" class="log-box">Dükkan açıldı! İş beklemek için "Müşteri Bekle" butonuna basın.</div>
     <div id="main-menu" class="btn-grid">
         <button onclick="musteriBekle()">🔔 Müşteri Bekle</button>
         <button onclick="parcaAl()">📦 Parça Al (300 TL)</button>
         <button onclick="reklamVer()">📢 Reklam Ver (500 TL)</button>
         <button onclick="yenidenBaslat()" style="background-color:#576574;">🔄 Yeniden Başlat</button>
     </div>
-
-    <div id="action-menu" class="action-btns">
+    <div id="action-menu" class="btn-grid" style="display: none;">
         <button class="btn-yes" onclick="isKabulEt()">✅ İşi Kabul Et</button>
         <button class="btn-no" onclick="isReddet()">❌ Reddet</button>
     </div>
 </div>
-
 <script>
-    // Oyun Değişkenleri
-    let kasa = 5000;
-    let parca = 5;
-    let itibar = 50;
-    let gun = 1;
-    let mevcutAriza = null;
-
+    let kasa = 5000; let parca = 5; let itibar = 50; let gun = 1; let mevcutAriza = null;
     const arizalar = [
-        { isim: "Motor Arızası 🛢️", parca: 3, kazanc: 1500 },
+        { isim: "Motor Arızası 🛢", parca: 3, kazanc: 1500 },
         { isim: "Fren Değişimi 🛑", parca: 1, kazanc: 600 },
-        { isim: "Şanzıman Tamiri ⚙️", parca: 4, kazanc: 2200 },
+        { isim: "Şanzıman Tamiri ⚙", parca: 4, kazanc: 2200 },
         { isim: "Periyodik Bakım 📋", parca: 1, kazanc: 500 }
     ];
-
     function ekranGuncelle() {
         document.getElementById("stat-gun").innerText = gun;
-        document.getElementById("stat-kasa").innerText = kasa + " TL";
+        document.getElementById("stat-kasa").innerText = kasa;
         document.getElementById("stat-parca").innerText = parca;
-        document.getElementById("stat-itibar").innerText = "%" + itibar;
-
-        // Oyun Bitme Kontrolleri
-        if (kasa <= 0) {
-            oyunBitti("😢 Maalesef paranız bitti ve dükkanınız battı! OYUN BİTTİ.");
-        } else if (itibar <= 0) {
-            oyunBitti("📉 Dükkanın itibarı sıfırlandı, müşteri gelmiyor! OYUN BİTTİ.");
-        } else if (itibar >= 100) {
-            oyunBitti("🏆 Tebrikler! Şehrin en popüler ve başarılı otomotiv dükkanı oldunuz! KAZANDINIZ!");
-        }
+        document.getElementById("stat-itibar").innerText = itibar;
+        if (kasa <= 0) { alert("Paranız bitti ve dükkan battı! OYUN BİTTİ."); yenidenBaslat(); }
+        else if (itibar <= 0) { alert("İtibarınız sıfırlandı, müşteri gelmiyor! OYUN BİTTİ."); yenidenBaslat(); }
+        else if (itibar >= 100) { alert("Tebrikler! Şehrin en popüler dükkanı oldunuz! KAZANDINIZ!"); yenidenBaslat(); }
     }
-
-    function logYaz(mesaj) {
-        document.getElementById("log").innerHTML = mesaj;
-    }
-
-    function menüDegistir(mod) {
-        if (mod === "is") {
+    function musteriBekle() {
+        if (Math.random() < 0.7) {
+            mevcutAriza = arizalar[Math.floor(Math.random() * arizalar.length)];
+            document.getElementById("log").innerHTML = `🔔 <b>Yeni Müşteri Geldi!</b><br>Arıza: ${mevcutAriza.isim}<br>Gerekli Parça: ${mevcutAriza.parca} adet<br>Kazanç: ${mevcutAriza.kazanc} TL`;
             document.getElementById("main-menu").style.display = "none";
             document.getElementById("action-menu").style.display = "grid";
         } else {
-            document.getElementById("main-menu").style.display = "grid";
-            document.getElementById("action-menu").style.display = "none";
+            let gider = Math.floor(Math.random() * 150) + 100; kasa -= gider;
+            document.getElementById("log").innerHTML = `💤 Bugün müşteri gelmedi...<br>Kira/Fatura gideri: <b>${gider} TL</b> kasadan düştü.`;
+            gun++; ekranGuncelle();
         }
     }
-
-    function musteriBekle() {
-        let musteriGeldi = Math.random() < 0.7; // %70 ihtimalle müşteri gelir
-        if (musteriGeldi) {
-            mevcutAriza = arizalar[Math.floor(Math.random() * arizalar.length)];
-            logYaz(`🔔 <b>Yeni Müşteri Geldi!</b><br>Araç Sorunu: ${mevcutAriza.isim}<br>Gerekli Parça: ${mevcutAriza.parca} adet<br>Teklif: ${mevcutAriza.kazanc} TL`);
-            menüDegistir("is");
-        } else {
-            let gider = Math.floor(Math.random() * 200) + 100;
-            kasa -= gider;
-            logYaz(`💤 Bugün dükkana hiç müşteri uğramadı...<br>Kira ve fatura gideri olarak <b>${gider} TL</b> kasadan düştü.`);
-            gun++;
-            ekranGuncelle();
-        }
-    }
-
     function isKabulEt() {
         if (parca >= mevcutAriza.parca) {
-            parca -= mevcutAriza.parca;
-            kasa += mevcutAriza.kazanc;
-            let itibarArtis = Math.floor(Math.random() * 5) + 3;
-            itibar += itibarArtis;
-            if (itibar > 100) itibar = 100;
-
-            logYaz(`🔧 Araç başarıyla tamir edildi!<br><b>+${mevcutAriza.kazanc} TL</b> kazandınız.<br>İtibarınız <b>%${itibarArtis}</b> arttı.`);
+            parca -= mevcutAriza.parca; kasa += mevcutAriza.kazanc; itibar += 5; if (itibar > 100) itibar = 100;
+            document.getElementById("log").innerHTML = `🔧 Tamir başarılı! <b>+${mevcutAriza.kazanc} TL</b> kazandınız.`;
         } else {
-            itibar -= 10;
-            if (itibar < 0) itibar = 0;
-            logYaz(`❌ <b>Yeterli yedek parçanız yoktu!</b> İşi yarıda bıraktığınız için müşteri kızdı. İtibarınız <b>%10</b> düştü.`);
+            itibar -= 10; if (itibar < 0) itibar = 0;
+            document.getElementById("log").innerHTML = `❌ Yeterli parça yoktu! İtibarınız %10 düştü.`;
         }
-        gun++;
-        menüDegistir("ana");
-        ekranGuncelle();
+        gun++; menuyuKapat();
     }
-
     function isReddet() {
-        itibar -= 3;
-        if (itibar < 0) itibar = 0;
-        logYaz(`Müşteriyi geri çevirdiniz. Diğer dükkanlara yöneldiği için itibarınız biraz düştü (%3).`);
-        gun++;
-        menüDegistir("ana");
+        itibar -= 3; if (itibar < 0) itibar = 0;
+        document.getElementById("log").innerHTML = `Müşteriyi reddettiniz. İtibar biraz düştü.`;
+        gun++; menuyuKapat();
+    }
+    function menuyuKapat() {
+        document.getElementById("main-menu").style.display = "grid";
+        document.getElementById("action-menu").style.display = "none";
         ekranGuncelle();
     }
-
     function parcaAl() {
-        if (kasa >= 300) {
-            kasa -= 300;
-            parca += 1;
-            logYaz(`📦 1 Adet yedek parça alındı. Kasadan 300 TL çıktı.`);
-            ekranGuncelle();
-        } else {
-            logYaz(`❌ Parça almak için kasada yeterli para (300 TL) yok!`);
-        }
+        if (kasa >= 300) { kasa -= 300; parca += 1; document.getElementById("log").innerHTML = `📦 1 Adet yedek parça alındı (300 TL).`; ekranGuncelle(); }
+        else { document.getElementById("log").innerHTML = `❌ Yetersiz bütçe!`; }
     }
-
     function reklamVer() {
-        if (kasa >= 500) {
-            kasa -= 500;
-            itibar += 15;
-            if (itibar > 100) itibar = 100;
-            logYaz(`📢 Sosyal medyaya ve yerel radyolara reklam verildi! İtibarınız <b>%15</b> arttı.`);
-            ekranGuncelle();
-        } else {
-            logYaz(`❌ Reklam vermek için kasada yeterli para (500 TL) yok!`);
-        }
+        if (kasa >= 500) { kasa -= 500; itibar += 15; if (itibar > 100) itibar = 100; document.getElementById("log").innerHTML = `📢 Reklam verildi, itibarınız %15 arttı.`; ekranGuncelle(); }
+        else { document.getElementById("log").innerHTML = `❌ Yetersiz bütçe!`; }
     }
-
-    function oyunBitti(mesaj) {
-        logYaz(`<b>OYNADIĞINIZ İÇİN TEŞEKKÜRLER!</b><br>${mesaj}`);
-        document.getElementById("main-menu").innerHTML = '<button onclick="yenidenBaslat()" style="grid-column: span 2; background-color:#10ac84;">🔄 Yeniden Başlat</button>';
-        document.getElementById("action-menu").style.display = "none";
-    </div>
-
     function yenidenBaslat() {
-        location.reload();
+        kasa = 5000; parca = 5; itibar = 50; gun = 1;
+        document.getElementById("log").innerHTML = `Dükkan yeniden açıldı!`;
+        document.getElementById("main-menu").style.display = "grid";
+        document.getElementById("action-menu").style.display = "none";
+        ekranGuncelle();
     }
 </script>
-
 </body>
 </html>
+
